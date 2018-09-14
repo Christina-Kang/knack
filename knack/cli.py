@@ -38,7 +38,8 @@ class CLI(object):  # pylint: disable=too-many-instance-attributes
                  query_cls=CLIQuery,
                  parser_cls=CLICommandParser,
                  commands_loader_cls=CLICommandsLoader,
-                 help_cls=CLIHelp):
+                 help_cls=CLIHelp,
+                 knack_config=None):
         """
         :param cli_name: The name of the CLI (e.g. the executable name 'az')
         :type cli_name: str
@@ -66,6 +67,11 @@ class CLI(object):  # pylint: disable=too-many-instance-attributes
         :type commands_loader_cls: knack.commands.CLICommandsLoader
         :param help_cls: Class to handle help
         :type help_cls: knack.help.CLIHelp
+        :param knack_config: Dictionary with key value pairs to specify configuration of knack.
+            Configurations include:
+            - key: retries_on_failure, value: the number of retries (an int) to perform on failed
+                and retryable errors. These include 5XX errors and 408 (timeouts), etc.
+        :type knack_config: dict
         """
         self.name = cli_name
         self.out_file = out_file
@@ -86,6 +92,7 @@ class CLI(object):  # pylint: disable=too-many-instance-attributes
         self.logging = logging_cls(self.name, cli_ctx=self)
         self.output = self.output_cls(cli_ctx=self)
         self.query = query_cls(cli_ctx=self)
+        
 
     @staticmethod
     def _should_show_version(args):

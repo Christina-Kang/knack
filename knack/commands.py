@@ -198,6 +198,12 @@ class CLICommandsLoader(object):
         client_factory = kwargs.get('client_factory', None)
 
         def _command_handler(command_args):
+
+            # if self.cli_ctx.knack_config is not None:
+            #     retries_on_failure = self.cli_ctx.knack_config.get('retries_on_failure')
+            #     if retries_on_failure is not None:
+            #         command_args['retries'] = retries_on_failure
+
             op = CLICommandsLoader._get_op_handler(operation)
             client = client_factory(command_args) if client_factory else None
             result = op(client, **command_args) if client else op(**command_args)
